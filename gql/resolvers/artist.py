@@ -20,7 +20,6 @@ def post_artist(data: ArtistInput) -> "model.Artist":
     with get_session() as session:
         artist = insert(artists).values(name=data.name).returning(column('id'))
         result = session.execute(artist).scalar()
-        session.commit()
 
     return model.Artist(id=result, name=data.name)
 

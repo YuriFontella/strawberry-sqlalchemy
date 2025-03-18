@@ -20,7 +20,6 @@ def post_music(data: MusicInput) -> "model.Music":
     with get_session() as session:
         music = insert(musics).values(title=data.title, artist_id=data.artist_id).returning(column('id'), column('artist_id'))
         result = session.execute(music).one()
-        session.commit()
 
     return model.Music(id=result.id, title=data.title, artist_id=result.artist_id)
 
