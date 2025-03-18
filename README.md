@@ -112,3 +112,25 @@ query {
   }
 }
 ```
+
+### Adicionar uma Música
+
+```graphql
+mutation ($MusicInput: MusicInput!) {
+  addMusic(data: $MusicInput) {
+    id
+    title
+  }
+}
+```
+
+Variáveis:
+
+```json
+{
+  "MusicInput": {
+    "title": "Nome da Música",
+    "artistId": 1
+  }
+}
+```

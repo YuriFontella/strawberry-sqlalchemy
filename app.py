@@ -7,7 +7,7 @@ from strawberry.litestar import make_graphql_controller
 from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL, GRAPHQL_WS_PROTOCOL
 
 from gql.schema.artist import ArtistQuery, ArtistMutation
-from gql.schema.music import MusicQuery
+from gql.schema.music import MusicQuery, MusicMutation
 from gql.schema.subscription import Subscription
 
 from middlewares.on_startup import create_all
@@ -21,7 +21,7 @@ class Query(ArtistQuery, MusicQuery):
 
 
 @strawberry.type
-class Mutation(ArtistMutation):
+class Mutation(ArtistMutation, MusicMutation):
     pass
 
 
