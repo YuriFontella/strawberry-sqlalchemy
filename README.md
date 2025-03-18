@@ -1,4 +1,4 @@
-# API GraphQL com Strawberry e PostgreSQL
+# API GraphQL com Strawberry e SQLAlchemy
 
 Este documento contém instruções para configurar e executar a API GraphQL que utiliza Strawberry como framework GraphQL e PostgreSQL como banco de dados.
 
