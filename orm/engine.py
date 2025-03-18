@@ -1,4 +1,4 @@
 from sqlalchemy import create_engine
-from settings import DSN
+from settings import URL
 
-engine = create_engine(url=DSN, echo=True)
+engine = create_engine(url=URL, echo=True)
