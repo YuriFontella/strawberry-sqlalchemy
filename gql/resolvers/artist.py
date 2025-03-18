@@ -1,6 +1,6 @@
 import typing
 
-import gql.types.model as model
+import gql.types.base as base
 
 from sqlalchemy import select, column, insert
 from gql.types.input import ArtistInput
@@ -9,23 +9,23 @@ from orm.tables import artists
 from orm.session import get_session
 
 
-def get_artists() -> typing.List["model.Artist"]:
+def get_artists() -> typing.List["base.Artist"]:
     with get_session() as session:
         records = session.execute(select(artists))
 
-    return [model.Artist(id=row.id, name=row.name) for row in records]
+    return [base.Artist(id=row.id, name=row.name) for row in records]
 
 
-def post_artist(data: ArtistInput) -> "model.Artist":
+def post_artist(data: ArtistInput) -> "base.Artist":
     with get_session() as session:
         artist = insert(artists).values(name=data.name).returning(column('id'))
         result = session.execute(artist).scalar()
 
-    return model.Artist(id=result, name=data.name)
+    return base.Artist(id=result, name=data.name)
 
 
-def get_artist_by_id(artist_id) -> "model.Artist":
+def get_artist_by_id(artist_id) -> "base.Artist":
     with get_session() as session:
         record = session.execute(select(artists).where(column('id') == artist_id)).one()
 
-    return model.Artist(id=record.id, name=record.name)
+    return base.Artist(id=record.id, name=record.name)

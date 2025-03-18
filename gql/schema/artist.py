@@ -1,7 +1,7 @@
 import typing
 import strawberry
 
-from gql.types.model import Artist
+from gql.types.base import Artist
 from gql.resolvers.artist import get_artists, post_artist
 
 

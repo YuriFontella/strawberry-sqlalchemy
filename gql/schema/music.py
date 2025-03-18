@@ -1,7 +1,7 @@
 import typing
 import strawberry
 
-from gql.types.model import Music
+from gql.types.base import Music
 from gql.resolvers.music import get_musics, post_music
 
 
