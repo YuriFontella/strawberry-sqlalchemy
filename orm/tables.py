@@ -1,4 +1,4 @@
-from sqlalchemy import Table, MetaData, Column, String, Integer
+from sqlalchemy import Table, MetaData, ForeignKey, Column, String, Integer
 
 
 metadata = MetaData()
@@ -15,5 +15,5 @@ musics = Table(
     metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('title', String),
-    Column('artist_id', Integer)
+    Column('artist_id', Integer, ForeignKey('artists.id'))
 )
