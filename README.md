@@ -61,7 +61,7 @@ strawberry server app
 Após iniciar o servidor, você pode acessar o GraphQL Playground em:
 
 ```
-http://localhost:8000
+http://localhost:8000/graphql
 ```
 
 ## Queries disponíveis
