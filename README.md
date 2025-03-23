@@ -35,7 +35,7 @@ CREATE DATABASE nome_do_banco;
 Crie um arquivo `.env` na raiz do projeto com a string de conexão do PostgreSQL:
 
 ```
-URL=postgresql://usuario:senha@localhost:5432/nome_do_banco
+URL=postgresql+psycopg://usuario:senha@localhost:5432/nome_do_banco
 ```
 
 Substitua `usuario`, `senha` e `nome_do_banco` pelos seus valores específicos.
