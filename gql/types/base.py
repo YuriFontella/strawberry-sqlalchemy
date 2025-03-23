@@ -1,5 +1,6 @@
-import typing
 import strawberry
+
+from typing import List
 
 from gql.resolvers.music import get_musics_by_artist
 from gql.resolvers.artist import get_artist_by_id
@@ -11,7 +12,7 @@ class Artist:
     name: str
 
     @strawberry.field()
-    def musics(self) -> typing.List["Music"]:
+    def musics(self) -> List["Music"]:
         return get_musics_by_artist(self.id)
 
 

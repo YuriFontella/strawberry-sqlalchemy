@@ -1,5 +1,6 @@
-import typing
 import strawberry
+
+from typing import List
 
 from gql.types.base import Music
 from gql.resolvers.music import get_musics, post_music
@@ -7,7 +8,7 @@ from gql.resolvers.music import get_musics, post_music
 
 @strawberry.type
 class MusicQuery:
-    musics: typing.List[Music] = strawberry.field(resolver=get_musics)
+    musics: List[Music] = strawberry.field(resolver=get_musics)
 
 
 @strawberry.type

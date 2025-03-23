@@ -1,5 +1,6 @@
-import typing
 import strawberry
+
+from typing import List
 
 from gql.types.base import Artist
 from gql.resolvers.artist import get_artists, post_artist
@@ -7,7 +8,7 @@ from gql.resolvers.artist import get_artists, post_artist
 
 @strawberry.type
 class ArtistQuery:
-    artists: typing.List[Artist] = strawberry.field(resolver=get_artists)
+    artists: List[Artist] = strawberry.field(resolver=get_artists)
 
 
 @strawberry.type
