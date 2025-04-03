@@ -1,7 +1,6 @@
 import strawberry
 
 from litestar import Litestar
-from litestar.config.cors import CORSConfig
 
 from strawberry.litestar import make_graphql_controller
 
@@ -10,9 +9,7 @@ from gql.schema.ludopatia import LudopatiaMutation
 from gql.schema.root import RootQuery
 
 from middlewares.on_startup import create_all
-
-cors_config = CORSConfig(allow_origins=['*'])
-
+from middlewares.util import cors_config, compression_config, rate_limit_config
 
 @strawberry.type
 class Query(RootQuery):
@@ -31,4 +28,10 @@ GraphQLController = make_graphql_controller(
     path='/graphql'
 )
 
-app = Litestar(route_handlers=[GraphQLController], cors_config=cors_config, on_startup=[create_all])
+app = Litestar(
+    route_handlers=[GraphQLController],
+    cors_config=cors_config,
+    compression_config=compression_config,
+    middleware=[rate_limit_config.middleware],
+    on_startup=[create_all]
+)

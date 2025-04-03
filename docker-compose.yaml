@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  platform-graphql:
+    image: upbet/originals:platform-graphql
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == applications
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512m
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # Entrypoint HTTPS
+        - traefik.http.routers.platform-graphql-https.rule=Host(`${DOMAIN?Variable not set}`) && PathPrefix(`/platform`)
+        - traefik.http.routers.platform-graphql-https.entrypoints=https
+        - traefik.http.routers.platform-graphql-https.tls=true
+        - traefik.http.routers.platform-graphql-https.tls.certresolver=le
+
+        # Middlewares
+        - traefik.http.routers.platform-graphql-https.middlewares=platform-graphql-stripprefix
+
+        # Stripprefix
+        - traefik.http.middlewares.platform-graphql-stripprefix.stripprefix.prefixes=/platform
+
+        # Service Port
+        - traefik.http.services.platform-graphql.loadbalancer.server.port=6003
+    networks:
+      - backend
+      - traefik-public
+
+networks:
+  backend:
+    external: true
+
+  traefik-public:
+    external: true
