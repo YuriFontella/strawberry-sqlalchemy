@@ -2,11 +2,15 @@ import strawberry
 
 
 @strawberry.input
-class ArtistInput:
-    name: str
+class OuvidoriaInput:
+    canal: str
+    cpf: str
+    atendimento: str
+    motivo: str
+    titulo: str
+    descricao: str
 
-
-@strawberry.input
-class MusicInput:
-    title: str
-    artist_id: int
+@strawberry.input()
+class LudopatiaInput:
+    email: str
+    resultado: str

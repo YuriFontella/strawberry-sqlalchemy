@@ -1,23 +1,32 @@
-from sqlalchemy import Table, MetaData, ForeignKey, Column, String, Integer, DateTime, CheckConstraint
+import uuid
+
+from sqlalchemy import Table, MetaData, Column, String, DateTime, Text, UUID, Boolean
 from sqlalchemy.sql import func
+
 
 metadata = MetaData()
 
-artists = Table(
-    'artists',
+ouvidoria = Table(
+    'ouvidoria',
     metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('name', String, unique=True, nullable=False, index=True),
-    Column('date', DateTime, default=func.now()),
-    CheckConstraint("length(name) > 0", name="name_not_empty")
+    Column('uuid', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    Column('canal', String, nullable=False),
+    Column('cpf', String, nullable=False, index=True),
+    Column('atendimento', String, nullable=False),
+    Column('motivo', String, nullable=False),
+    Column('titulo', String, nullable=False),
+    Column('descricao', Text, nullable=False),
+    Column('situacao', Boolean, nullable=False, default=False),
+    Column('data', DateTime, default=func.now())
 )
 
-musics = Table(
-    'musics',
+ludopatia = Table(
+    'ludopatia',
     metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('title', String, nullable=False, index=True),
-    Column('artist_id', Integer, ForeignKey('artists.id'), nullable=False),
-    Column('created_at', DateTime, default=func.now()),
-    Column('updated_at', DateTime, default=func.now(), onupdate=func.now())
+    Column('uuid', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    Column('email', String, nullable=False, index=True),
+    Column('resultado', Text, nullable=False),
+    Column('situacao', Boolean, nullable=False, default=False),
+    Column('criado', DateTime, default=func.now()),
+    Column('atualizado', DateTime, default=func.now(), onupdate=func.now())
 )
