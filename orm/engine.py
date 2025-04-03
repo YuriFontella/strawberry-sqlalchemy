@@ -1,4 +1,12 @@
 from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 from settings import URL
 
-engine = create_engine(url=URL, echo=True)
+engine = create_engine(
+    url=URL,
+    echo=True,
+    poolclass=QueuePool,
+    pool_pre_ping=True,
+    pool_recycle=3600,
+    pool_timeout=30
+)
