@@ -4,7 +4,7 @@ from settings import URL
 
 engine = create_engine(
     url=URL,
-    echo=True,
+    echo=False,
     poolclass=QueuePool,
     pool_pre_ping=True,
     pool_recycle=3600,
