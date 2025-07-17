@@ -3,8 +3,8 @@ from contextlib import contextmanager
 from sqlalchemy.orm import sessionmaker, Session
 from orm.engine import engine
 
+SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
 
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, expire_on_commit=False)
 
 @contextmanager
 def get_session() -> Generator[Session, None, None]:

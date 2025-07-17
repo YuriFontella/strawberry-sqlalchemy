@@ -13,7 +13,7 @@ def get_artists() -> List["base.Artist"]:
     with get_session() as session:
         records = session.execute(select(artists))
 
-    return [base.Artist(id=row.id, name=row.name) for row in records]
+    return [base.Artist(id=row.id, name=row.name, status=row.status) for row in records]
 
 
 def post_artist(data: ArtistInput) -> "base.Artist":

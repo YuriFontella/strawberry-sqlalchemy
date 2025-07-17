@@ -10,6 +10,7 @@ from gql.resolvers.artist import get_artist_by_id
 class Artist:
     id: int
     name: str
+    status: bool
 
     @strawberry.field()
     def musics(self) -> List["Music"]:

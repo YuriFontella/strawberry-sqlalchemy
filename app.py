@@ -6,6 +6,7 @@ from litestar.config.cors import CORSConfig
 from strawberry.litestar import make_graphql_controller
 from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL, GRAPHQL_WS_PROTOCOL
 
+from gql.schema.root import RootQuery
 from gql.schema.artist import ArtistQuery, ArtistMutation
 from gql.schema.music import MusicQuery, MusicMutation
 from gql.schema.subscription import Subscription
@@ -16,7 +17,7 @@ cors_config = CORSConfig(allow_origins=['*'])
 
 
 @strawberry.type
-class Query(ArtistQuery, MusicQuery):
+class Query(RootQuery, ArtistQuery, MusicQuery):
     pass
 
 
