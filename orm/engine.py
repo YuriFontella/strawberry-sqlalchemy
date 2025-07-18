@@ -7,8 +7,8 @@ engine = create_engine(
     echo=False,
     poolclass=QueuePool,
     pool_pre_ping=True,
-    pool_recycle=3600,
+    pool_recycle=1800,
     pool_timeout=30,
-    pool_size=2,
-    max_overflow=8
+    pool_size=10,
+    max_overflow=20
 )
