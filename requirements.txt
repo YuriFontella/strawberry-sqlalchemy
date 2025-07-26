@@ -1,4 +1,4 @@
-strawberry-graphql[debug-server]==0.276.0
+strawberry-graphql[debug-server]==0.278.0
 litestar==2.16.0
 uvicorn[standard]==0.35.0
 sqlalchemy==2.0.41
