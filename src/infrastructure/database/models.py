@@ -21,4 +21,4 @@ musics = Table(
     Column('artist_id', Integer, ForeignKey('artists.id'), nullable=False),
     Column('created_at', DateTime, default=func.now()),
     Column('updated_at', DateTime, default=func.now(), onupdate=func.now())
-)
+) 

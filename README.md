@@ -1,136 +1,105 @@
-# API GraphQL com Strawberry e SQLAlchemy
+# Strawberry SQLAlchemy - Clean Architecture
 
-Este documento contém instruções para configurar e executar a API GraphQL que utiliza Strawberry como framework GraphQL e PostgreSQL como banco de dados.
+API GraphQL usando Strawberry GraphQL e SQLAlchemy seguindo os princípios da **Clean Architecture**.
 
-## Pré-requisitos
+## 🚀 Como Executar
 
-- Python 3.9+
-- PostgreSQL
-- pip (gerenciador de pacotes Python)
+### Pré-requisitos
+- Python 3.8+
+- SQLite (padrão) ou PostgreSQL
 
-## Configuração
+### Instalação
 
-### 1. Criando o Banco de Dados PostgreSQL
-
-Execute o seguinte comando para criar um banco de dados PostgreSQL:
-
+1. Clone e instale as dependências:
 ```bash
-createdb nome_do_banco
-```
-
-Ou, se preferir usar o psql:
-
-```bash
-psql -U postgres
-```
-
-Depois, dentro do psql:
-
-```sql
-CREATE DATABASE nome_do_banco;
-```
-
-### 2. Configurando o arquivo .env
-
-Crie um arquivo `.env` na raiz do projeto com a string de conexão do PostgreSQL:
-
-```
-URL=postgresql+psycopg://usuario:senha@localhost:5432/nome_do_banco
-```
-
-Substitua `usuario`, `senha` e `nome_do_banco` pelos seus valores específicos.
-
-### 3. Instalando as dependências
-
-Instale todas as dependências necessárias utilizando o pip:
-
-```bash
+git clone <repository-url>
+cd strawberry-sqlalchemy
 pip install -r requirements.txt
 ```
 
-### 4. Iniciando o servidor
-
-Execute o servidor Strawberry com o seguinte comando:
-
+2. Configure as variáveis de ambiente:
 ```bash
-strawberry server app
+cp env.example .env
 ```
 
-### 5. Acessando o GraphQL Playground
-
-Após iniciar o servidor, você pode acessar o GraphQL Playground em:
-
-```
-http://localhost:8000/graphql
+3. Execute a aplicação:
+```bash
+python main.py
 ```
 
-## Queries disponíveis
+A aplicação estará disponível em `http://localhost:8000/graphql`
 
-### Adicionar um Artista
+## 🏗️ Arquitetura
 
+```
+src/
+├── domain/                 # Entidades e interfaces
+├── application/           # Casos de uso
+├── infrastructure/        # Banco de dados e configurações
+└── presentation/         # GraphQL (resolvers, schema)
+```
+
+## 📊 Exemplos de Queries
+
+### Queries
 ```graphql
-mutation ($ArtistInput: ArtistInput!) {
-  addArtist(data: $ArtistInput) {
-    id
-    name
-  }
-}
-```
-
-Variáveis:
-
-```json
-{
-  "ArtistInput": {
-    "name": "Nome do Artista"
-  }
-}
-```
-
-### Listar todos os Artistas e suas Músicas
-
-```graphql
+# Obter todos os artistas
 query {
   artists {
+    id
     name
-    musics {
-      title
-    }
+    status
   }
 }
-```
 
-### Listar todas as Músicas e seus Artistas
-
-```graphql
+# Obter músicas de um artista
 query {
-  musics {
-    title
-    artist {
-      name
-    }
-  }
-}
-```
-
-### Adicionar uma Música
-
-```graphql
-mutation ($MusicInput: MusicInput!) {
-  addMusic(data: $MusicInput) {
+  musicsByArtist(artistId: 1) {
     id
     title
   }
 }
 ```
 
-Variáveis:
+### Mutations
+```graphql
+# Criar artista
+mutation {
+  createArtist(data: { name: "Novo Artista", status: true }) {
+    id
+    name
+  }
+}
 
-```json
-{
-  "MusicInput": {
-    "title": "Nome da Música",
-    "artistId": 1
+# Criar música
+mutation {
+  createMusic(data: { title: "Nova Música", artistId: 1 }) {
+    id
+    title
   }
 }
 ```
+
+## 🧪 Testes
+
+```bash
+pytest tests/
+```
+
+## 🔧 Desenvolvimento
+
+### Adicionando Novas Funcionalidades
+
+1. **Entidade**: `src/domain/entities/`
+2. **Repositório**: `src/domain/repositories/` (interface) + `src/infrastructure/database/repositories.py` (implementação)
+3. **Caso de Uso**: `src/application/use_cases/`
+4. **Resolver**: `src/presentation/graphql/resolvers.py`
+5. **Container**: Adicione dependências em `src/infrastructure/container.py`
+
+## 📈 Benefícios
+
+- ✅ **Independência de Frameworks**: Domínio não depende de frameworks externos
+- ✅ **Testabilidade**: Fácil testar cada camada isoladamente
+- ✅ **Independência de UI**: Lógica de negócio independente da interface
+- ✅ **Independência de Banco**: Fácil trocar implementações de banco de dados
+- ✅ **Separação de Responsabilidades**: Cada camada tem responsabilidade específica
