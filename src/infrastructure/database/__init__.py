@@ -1,6 +1,7 @@
 from .models import artists, musics
 from .session import get_session
-from .repositories import SQLAlchemyArtistRepository, SQLAlchemyMusicRepository
+from .repositories.artist_repository import SQLAlchemyArtistRepository
+from .repositories.music_repository import SQLAlchemyMusicRepository
 
 __all__ = [
     'artists', 
@@ -8,4 +9,4 @@ __all__ = [
     'get_session', 
     'SQLAlchemyArtistRepository', 
     'SQLAlchemyMusicRepository'
-] 
+]

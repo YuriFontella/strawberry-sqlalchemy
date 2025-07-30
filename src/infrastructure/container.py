@@ -6,7 +6,8 @@ from src.application.use_cases.artist_use_cases import ArtistUseCases
 from src.application.use_cases.music_use_cases import MusicUseCases
 from src.presentation.graphql.artist.resolver import ArtistResolvers
 from src.presentation.graphql.music.resolver import MusicResolvers
-from src.infrastructure.database.repositories import SQLAlchemyArtistRepository, SQLAlchemyMusicRepository
+from src.infrastructure.database.repositories.artist_repository import SQLAlchemyArtistRepository
+from src.infrastructure.database.repositories.music_repository import SQLAlchemyMusicRepository
 
 
 @dataclass
