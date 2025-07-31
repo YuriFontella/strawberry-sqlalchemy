@@ -76,22 +76,3 @@ class MusicSubscription:
         """Notifica quando músicas de um artista são atualizadas"""
         pass
 
-
-@strawberry.type
-class MusicSubscription:
-    """Subscriptions relacionadas a músicas"""
-
-    @strawberry.subscription
-    async def music_created(self) -> MusicType:
-        """Notifica quando uma nova música é criada"""
-        pass
-
-    @strawberry.subscription
-    async def music_updated(self, music_id: int) -> MusicType:
-        """Notifica quando uma música é atualizada"""
-        pass
-
-    @strawberry.subscription
-    async def musics_by_artist_updated(self, artist_id: int) -> List[MusicType]:
-        """Notifica quando músicas de um artista são atualizadas"""
-        pass
