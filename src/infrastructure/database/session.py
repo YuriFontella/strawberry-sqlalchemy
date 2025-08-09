@@ -9,13 +9,13 @@ from sqlalchemy.pool import QueuePool
 # Criar engine do banco de dados
 engine = create_engine(
     url=get_database_url(),
-    echo = False,
-    poolclass = QueuePool,
-    pool_pre_ping = True,
-    pool_recycle = 1800,
-    pool_timeout = 30,
-    pool_size = 10,
-    max_overflow = 20
+    echo=False,
+    poolclass=QueuePool,
+    pool_pre_ping=True,
+    pool_recycle=1800,
+    pool_timeout=30,
+    pool_size=10,
+    max_overflow=20,
 )
 
 # Criar session factory
@@ -38,4 +38,4 @@ def get_session():
 
 def create_tables():
     """Cria todas as tabelas no banco de dados"""
-    metadata.create_all(bind=engine) 
+    metadata.create_all(bind=engine)

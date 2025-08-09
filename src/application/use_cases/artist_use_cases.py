@@ -7,6 +7,7 @@ from src.domain.repositories.artist_repository import ArtistRepository
 @dataclass
 class ArtistUseCases:
     """Casos de uso para artistas"""
+
     artist_repository: ArtistRepository
 
     def get_all_artists(self) -> List[Artist]:
@@ -22,7 +23,9 @@ class ArtistUseCases:
         artist = Artist(id=None, name=name, status=status)
         return self.artist_repository.create(artist)
 
-    def update_artist(self, artist_id: int, name: str = None, status: bool = None) -> Optional[Artist]:
+    def update_artist(
+        self, artist_id: int, name: str = None, status: bool = None
+    ) -> Optional[Artist]:
         """Atualiza um artista existente"""
         artist = self.artist_repository.get_by_id(artist_id)
         if not artist:

@@ -8,6 +8,7 @@ from .input import ArtistInput, ArtistUpdateInput
 @dataclass
 class ArtistResolvers:
     """Resolvers para Artist"""
+
     artist_use_cases: ArtistUseCases
 
     def get_artists(self) -> List[ArtistType]:
@@ -25,12 +26,12 @@ class ArtistResolvers:
         artist = self.artist_use_cases.create_artist(data.name, data.status)
         return ArtistType.from_entity(artist)
 
-    def update_artist(self, artist_id: int, data: ArtistUpdateInput) -> Optional[ArtistType]:
+    def update_artist(
+        self, artist_id: int, data: ArtistUpdateInput
+    ) -> Optional[ArtistType]:
         """Atualiza um artista"""
         artist = self.artist_use_cases.update_artist(
-            artist_id,
-            name=data.name,
-            status=data.status
+            artist_id, name=data.name, status=data.status
         )
         return ArtistType.from_entity(artist) if artist else None
 

@@ -1,1 +1,0 @@
-# Infrastructure Layer - External Interfaces and Frameworks 

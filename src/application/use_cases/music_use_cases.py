@@ -7,6 +7,7 @@ from src.domain.repositories.music_repository import MusicRepository
 @dataclass
 class MusicUseCases:
     """Casos de uso para músicas"""
+
     music_repository: MusicRepository
 
     def get_all_musics(self) -> List[Music]:
@@ -26,7 +27,9 @@ class MusicUseCases:
         music = Music(id=None, title=title, artist_id=artist_id)
         return self.music_repository.create(music)
 
-    def update_music(self, music_id: int, title: str = None, artist_id: int = None) -> Optional[Music]:
+    def update_music(
+        self, music_id: int, title: str = None, artist_id: int = None
+    ) -> Optional[Music]:
         """Atualiza uma música existente"""
         music = self.music_repository.get_by_id(music_id)
         if not music:
