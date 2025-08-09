@@ -33,7 +33,14 @@ def create_app() -> FastAPI:
         )
 
     # GraphQL Router
-    graphql_app = GraphQLRouter(schema, context_getter=get_context)
+    graphql_app = GraphQLRouter(
+        schema,
+        context_getter=get_context,
+        subscription_protocols=[
+            GRAPHQL_TRANSPORT_WS_PROTOCOL,
+            GRAPHQL_WS_PROTOCOL,
+        ],
+    )
 
     # Aplicação
     fastapi = FastAPI(debug=settings.debug)
