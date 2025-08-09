@@ -1,8 +1,12 @@
+import asyncio
 import strawberry
 from strawberry.types import Info
-from typing import List
+from typing import List, AsyncGenerator
 from .type import ArtistType
 from .input import ArtistInput, ArtistUpdateInput
+
+# Lista de consumidores conectados
+connected_consumers = []
 
 
 @strawberry.type
@@ -36,7 +40,13 @@ class ArtistMutation:
     def create_artist(self, info: Info, data: ArtistInput) -> ArtistType:
         """Cria um novo artista"""
         context = info.context
-        return context.artist_resolvers.create_artist(data)
+        artist = context.artist_resolvers.create_artist(data)
+
+        # Notifica todos os consumidores conectados
+        for queue in connected_consumers:
+            queue.put_nowait(artist)
+
+        return artist
 
     @strawberry.field()
     def update_artist(
@@ -64,13 +74,15 @@ class ArtistSubscription:
     """Subscriptions relacionadas a artistas"""
 
     @strawberry.subscription()
-    async def artist_created(self) -> ArtistType:
+    async def artist_created(self) -> AsyncGenerator[ArtistType, None]:
         """Notifica quando um novo artista é criado"""
-        # Implementação de subscription em tempo real
-        # Aqui você integraria com um sistema de eventos/pub-sub
-        pass
 
-    @strawberry.subscription()
-    async def artist_updated(self, artist_id: int) -> ArtistType:
-        """Notifica quando um artista é atualizado"""
-        pass
+        queue = asyncio.Queue()
+        connected_consumers.append(queue)
+
+        try:
+            while True:
+                artist = await queue.get()
+                yield artist
+        finally:
+            connected_consumers.remove(queue)
