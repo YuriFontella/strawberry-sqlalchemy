@@ -1,29 +1,29 @@
 import strawberry
-from .artist.schema import ArtistQuery, ArtistMutation, ArtistSubscription
-from .music.schema import MusicQuery, MusicMutation, MusicSubscription
+from strawberry.tools import merge_types
 
+from strawberry.schema.config import StrawberryConfig
+from src.presentation.graphql.artist.schema import (
+    ArtistQuery,
+    ArtistMutation,
+    ArtistSubscription,
+)
+from src.presentation.graphql.music.schema import (
+    MusicQuery,
+    MusicMutation,
+    MusicSubscription,
+)
 
-@strawberry.type
-class Query(ArtistQuery, MusicQuery):
-    """Query principal que herda de todos os módulos"""
-
-    pass
-
-
-@strawberry.type
-class Mutation(ArtistMutation, MusicMutation):
-    """Mutation principal que herda de todos os módulos"""
-
-    pass
-
-
-@strawberry.type
-class Subscription(ArtistSubscription, MusicSubscription):
-    """Subscription principal que herda de todos os módulos"""
-
-    pass
+# Combine os tipos usando merge_types
+Query = merge_types("Query", (ArtistQuery, MusicQuery))
+Mutation = merge_types("Mutation", (ArtistMutation, MusicMutation))
+Subscription = merge_types("Subscription", (ArtistSubscription, MusicSubscription))
 
 
 def create_schema() -> strawberry.Schema:
     """Cria o schema GraphQL federado"""
-    return strawberry.Schema(query=Query, mutation=Mutation, subscription=Subscription)
+    return strawberry.Schema(
+        query=Query,
+        mutation=Mutation,
+        subscription=Subscription,
+        config=StrawberryConfig(auto_camel_case=False),
+    )

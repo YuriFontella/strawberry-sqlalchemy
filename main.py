@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from strawberry.fastapi import GraphQLRouter
 from strawberry.subscriptions import GRAPHQL_TRANSPORT_WS_PROTOCOL, GRAPHQL_WS_PROTOCOL
 
 from src.infrastructure.container import Container
 from src.infrastructure.config.settings import get_settings
+from src.infrastructure.config.log import configure_logging, get_logger
 from src.infrastructure.database.session import create_tables
 from src.presentation.graphql.schema import create_schema
-from src.presentation.graphql.context import GraphQLContext
 
 
 def create_app() -> FastAPI:
@@ -15,6 +17,12 @@ def create_app() -> FastAPI:
 
     # Configurações
     settings = get_settings()
+
+    # Configuração de logging
+    configure_logging(settings.log_level)
+    logger = get_logger(__name__)
+
+    logger.info("Iniciando aplicação")
 
     # Container de dependências
     container = Container()
@@ -26,11 +34,8 @@ def create_app() -> FastAPI:
     schema = create_schema()
 
     # Contexto do GraphQL
-    async def get_context():
-        return GraphQLContext(
-            artist_resolvers=container.artist_resolvers,
-            music_resolvers=container.music_resolvers,
-        )
+    def get_context():
+        return container.graphql_context()
 
     # GraphQL Router
     graphql_app = GraphQLRouter(
@@ -53,6 +58,14 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # Configuração de Trusted Hosts
+    fastapi.add_middleware(
+        TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1"]
+    )
+
+    # Configuração de GZip Middleware
+    fastapi.add_middleware(GZipMiddleware, minimum_size=1000, compresslevel=5)
 
     # Adiciona rota GraphQL
     fastapi.include_router(graphql_app, prefix="/graphql")

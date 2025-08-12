@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from typing import List, Optional
+from uuid import UUID
 from src.domain.entities.artist import Artist
 from src.domain.repositories.artist_repository import ArtistRepository
+from src.infrastructure.config.log import get_logger
 
 
 @dataclass
@@ -10,24 +12,32 @@ class ArtistUseCases:
 
     artist_repository: ArtistRepository
 
+    def __post_init__(self):
+        self.logger = get_logger(__name__)
+
     def get_all_artists(self) -> List[Artist]:
         """Obtém todos os artistas"""
+        self.logger.info("Buscando todos os artistas")
         return self.artist_repository.get_all()
 
-    def get_artist_by_id(self, artist_id: int) -> Optional[Artist]:
-        """Obtém um artista pelo ID"""
-        return self.artist_repository.get_by_id(artist_id)
+    def get_artist_by_id(self, artist_uuid: UUID) -> Optional[Artist]:
+        """Obtém um artista pelo UUID"""
+        self.logger.info("Buscando artista", id=str(artist_uuid))
+        return self.artist_repository.get_by_id(artist_uuid)
 
     def create_artist(self, name: str, status: bool = True) -> Artist:
         """Cria um novo artista"""
-        artist = Artist(id=None, name=name, status=status)
+        self.logger.info("Criando artista", name=name)
+        artist = Artist(name=name, status=status)
         return self.artist_repository.create(artist)
 
     def update_artist(
-        self, artist_id: int, name: str = None, status: bool = None
+        self, artist_uuid: UUID, name: str = None, status: bool = None
     ) -> Optional[Artist]:
         """Atualiza um artista existente"""
-        artist = self.artist_repository.get_by_id(artist_id)
+        self.logger.info("Atualizando artista", id=str(artist_uuid))
+
+        artist = self.artist_repository.get_by_id(artist_uuid)
         if not artist:
             return None
 
@@ -38,26 +48,27 @@ class ArtistUseCases:
 
         return self.artist_repository.update(artist)
 
-    def delete_artist(self, artist_id: int) -> bool:
+    def delete_artist(self, artist_uuid: UUID) -> bool:
         """Deleta um artista"""
-        return self.artist_repository.delete(artist_id)
+        self.logger.info("Deletando artista", id=str(artist_uuid))
+        return self.artist_repository.delete(artist_uuid)
 
     def get_active_artists(self) -> List[Artist]:
         """Obtém apenas artistas ativos"""
         return self.artist_repository.get_active_artists()
 
-    def deactivate_artist(self, artist_id: int) -> Optional[Artist]:
+    def deactivate_artist(self, artist_uuid: UUID) -> Optional[Artist]:
         """Desativa um artista"""
-        artist = self.artist_repository.get_by_id(artist_id)
+        artist = self.artist_repository.get_by_id(artist_uuid)
         if not artist:
             return None
 
         artist.deactivate()
         return self.artist_repository.update(artist)
 
-    def activate_artist(self, artist_id: int) -> Optional[Artist]:
+    def activate_artist(self, artist_uuid: UUID) -> Optional[Artist]:
         """Ativa um artista"""
-        artist = self.artist_repository.get_by_id(artist_id)
+        artist = self.artist_repository.get_by_id(artist_uuid)
         if not artist:
             return None
 

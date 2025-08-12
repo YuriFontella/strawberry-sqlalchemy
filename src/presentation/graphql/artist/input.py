@@ -1,17 +1,13 @@
 import strawberry
 
+from src.domain.entities.artist import Artist
+
 
 @strawberry.input
-class ArtistInput:
+class ArtistInput(Artist):
     """Input GraphQL para Artist"""
 
-    name: str
-    status: bool = True
-
 
 @strawberry.input
-class ArtistUpdateInput:
+class ArtistUpdateInput(Artist):
     """Input GraphQL para atualização de Artist"""
-
-    name: str
-    status: bool

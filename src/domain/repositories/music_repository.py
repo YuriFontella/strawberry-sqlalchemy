@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from ..entities.music import Music
+from uuid import UUID
+from src.domain.entities.music import Music
 
 
 class MusicRepository(ABC):
@@ -12,12 +13,12 @@ class MusicRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, music_id: int) -> Optional[Music]:
-        """Retorna uma música pelo ID"""
+    def get_by_id(self, music_uuid: UUID) -> Optional[Music]:
+        """Retorna uma música pelo UUID"""
         pass
 
     @abstractmethod
-    def get_by_artist_id(self, artist_id: int) -> List[Music]:
+    def get_by_artist_uuid(self, artist_uuid: UUID) -> List[Music]:
         """Retorna todas as músicas de um artista"""
         pass
 
@@ -32,6 +33,6 @@ class MusicRepository(ABC):
         pass
 
     @abstractmethod
-    def delete(self, music_id: int) -> bool:
-        """Deleta uma música pelo ID"""
+    def delete(self, music_uuid: UUID) -> bool:
+        """Deleta uma música pelo UUID"""
         pass
