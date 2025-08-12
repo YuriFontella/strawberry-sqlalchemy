@@ -12,6 +12,7 @@ class Settings:
     database_url: str
     debug: bool = False
     cors_origins: list = None
+    log_level: str = "INFO"
 
     def __post_init__(self):
         if self.cors_origins is None:
@@ -29,4 +30,5 @@ def get_settings() -> Settings:
         database_url=get_database_url(),
         debug=os.getenv("DEBUG", "False").lower() == "true",
         cors_origins=os.getenv("CORS_ORIGINS", "*").split(","),
+        log_level=os.getenv("LOG_LEVEL", "INFO"),
     )

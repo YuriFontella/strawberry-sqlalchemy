@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from ..entities.artist import Artist
+from uuid import UUID
+from src.domain.entities.artist import Artist
 
 
 class ArtistRepository(ABC):
@@ -12,8 +13,8 @@ class ArtistRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, artist_id: int) -> Optional[Artist]:
-        """Retorna um artista pelo ID"""
+    def get_by_id(self, artist_uuid: UUID) -> Optional[Artist]:
+        """Retorna um artista pelo UUID"""
         pass
 
     @abstractmethod
@@ -27,8 +28,8 @@ class ArtistRepository(ABC):
         pass
 
     @abstractmethod
-    def delete(self, artist_id: int) -> bool:
-        """Deleta um artista pelo ID"""
+    def delete(self, artist_uuid: UUID) -> bool:
+        """Deleta um artista pelo UUID"""
         pass
 
     @abstractmethod

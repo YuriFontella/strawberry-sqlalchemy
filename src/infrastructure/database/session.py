@@ -1,9 +1,9 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from .models import metadata
-from src.infrastructure.config.settings import get_database_url
 from sqlalchemy.pool import QueuePool
+from src.infrastructure.database.models import metadata
+from src.infrastructure.config.settings import get_database_url
 
 
 # Criar engine do banco de dados

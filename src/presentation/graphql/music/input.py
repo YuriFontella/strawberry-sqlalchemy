@@ -1,15 +1,13 @@
 import strawberry
 
+from src.domain.entities.music import Music
+
 
 @strawberry.input
-class MusicInput:
+class MusicInput(Music):
     """Input GraphQL para Music"""
-    title: str
-    artist_id: int
 
 
 @strawberry.input
-class MusicUpdateInput:
+class MusicUpdateInput(Music):
     """Input GraphQL para atualização de Music"""
-    title: str
-    artist_id: int

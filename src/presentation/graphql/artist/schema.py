@@ -1,9 +1,10 @@
 import asyncio
 import strawberry
+from uuid import UUID
 from strawberry.types import Info
 from typing import List, AsyncGenerator
-from .type import ArtistType
-from .input import ArtistInput, ArtistUpdateInput
+from src.presentation.graphql.artist.type import ArtistType
+from src.presentation.graphql.artist.input import ArtistInput, ArtistUpdateInput
 
 # Lista de consumidores conectados
 connected_consumers = []
@@ -20,10 +21,10 @@ class ArtistQuery:
         return context.artist_resolvers.get_artists()
 
     @strawberry.field()
-    def artist(self, info: Info, artist_id: int) -> ArtistType | None:
-        """Obtém um artista pelo ID"""
+    def artist(self, info: Info, artist_uuid: UUID) -> ArtistType | None:
+        """Obtém um artista pelo UUID"""
         context = info.context
-        return context.artist_resolvers.get_artist_by_id(artist_id)
+        return context.artist_resolvers.get_artist_by_id(artist_uuid)
 
     @strawberry.field()
     def active_artists(self, info: Info) -> List[ArtistType]:
@@ -50,23 +51,23 @@ class ArtistMutation:
 
     @strawberry.field()
     def update_artist(
-        self, info: Info, artist_id: int, data: ArtistUpdateInput
+        self, info: Info, artist_uuid: UUID, data: ArtistUpdateInput
     ) -> ArtistType | None:
         """Atualiza um artista"""
         context = info.context
-        return context.artist_resolvers.update_artist(artist_id, data)
+        return context.artist_resolvers.update_artist(artist_uuid, data)
 
     @strawberry.field()
-    def delete_artist(self, info: Info, artist_id: int) -> bool:
+    def delete_artist(self, info: Info, artist_uuid: UUID) -> bool:
         """Deleta um artista"""
         context = info.context
-        return context.artist_resolvers.delete_artist(artist_id)
+        return context.artist_resolvers.delete_artist(artist_uuid)
 
     @strawberry.field()
-    def delete_music(self, info: Info, music_id: int) -> bool:
+    def delete_music(self, info: Info, music_uuid: UUID) -> bool:
         """Deleta uma música"""
         context = info.context
-        return context.music_resolvers.delete_music(music_id)
+        return context.music_resolvers.delete_music(music_uuid)
 
 
 @strawberry.type

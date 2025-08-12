@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from uuid import uuid4, UUID
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
 
@@ -7,9 +8,9 @@ from typing import Optional
 class Artist:
     """Entidade de domínio para Artist"""
 
-    id: Optional[int]
     name: str
     status: bool = True
+    uuid: Optional[UUID] = field(default_factory=uuid4)
     date: Optional[datetime] = None
 
     def __post_init__(self):

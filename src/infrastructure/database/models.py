@@ -4,10 +4,10 @@ from sqlalchemy import (
     ForeignKey,
     Column,
     String,
-    Integer,
     Boolean,
     DateTime,
     CheckConstraint,
+    UUID,
 )
 from sqlalchemy.sql import func
 
@@ -16,7 +16,7 @@ metadata = MetaData()
 artists = Table(
     "artists",
     metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("uuid", UUID, primary_key=True),
     Column("name", String, unique=True, nullable=False, index=True),
     Column("status", Boolean, default=True),
     Column("date", DateTime, default=func.now()),
@@ -27,9 +27,9 @@ artists = Table(
 musics = Table(
     "musics",
     metadata,
-    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("uuid", UUID, primary_key=True),
     Column("title", String, nullable=False, index=True),
-    Column("artist_id", Integer, ForeignKey("artists.id"), nullable=False),
+    Column("artist_uuid", UUID, ForeignKey("artists.uuid"), nullable=False),
     Column("created_at", DateTime, default=func.now()),
     Column("updated_at", DateTime, default=func.now(), onupdate=func.now()),
 )

@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from uuid import uuid4, UUID
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
 
@@ -7,9 +8,9 @@ from typing import Optional
 class Music:
     """Entidade de domínio para Music"""
 
-    id: Optional[int]
     title: str
-    artist_id: int
+    artist_uuid: UUID
+    uuid: Optional[UUID] = field(default_factory=uuid4)
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
@@ -24,7 +25,7 @@ class Music:
         self.title = new_title
         self.updated_at = datetime.now()
 
-    def change_artist(self, new_artist_id: int) -> None:
+    def change_artist(self, new_artist_uuid: UUID) -> None:
         """Muda o artista da música"""
-        self.artist_id = new_artist_id
+        self.artist_uuid = new_artist_uuid
         self.updated_at = datetime.now()

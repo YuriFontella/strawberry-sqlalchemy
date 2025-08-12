@@ -44,19 +44,20 @@ src/
 ### Queries
 ```graphql
 # Obter todos os artistas
-query {
+query get_artists {
   artists {
-    id
-    name
+    uuid
+    name,
     status
   }
 }
 
 # Obter músicas de um artista
-query {
-  musicsByArtist(artistId: 1) {
-    id
+query music_by_artist {
+  musics_by_artist (artist_uuid: "26077a72-5f1f-4ffe-b1ce-63ab14556cef") {
+    uuid
     title
+    artist_uuid
   }
 }
 ```
@@ -64,18 +65,35 @@ query {
 ### Mutations
 ```graphql
 # Criar artista
-mutation {
-  createArtist(data: { name: "Novo Artista", status: true }) {
-    id
+mutation add_artist ($ArtistInput: ArtistInput!) {
+  create_artist(data: $ArtistInput) {
+    uuid
     name
   }
 }
+```
+```json
+{
+"ArtistInput": {
+    "name": "Eminem"
+  }
+}
+```
 
+```graphql
 # Criar música
-mutation {
-  createMusic(data: { title: "Nova Música", artistId: 1 }) {
-    id
+mutation add_music ($MusicInput: MusicInput!) {
+  create_music(data: $MusicInput) {
+    uuid
     title
+  }
+}
+```
+```json
+{
+  "MusicInput": {
+    "title": "My name is",
+    "artist_uuid": "26077a72-5f1f-4ffe-b1ce-63ab14556cef"
   }
 }
 ```

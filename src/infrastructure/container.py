@@ -1,7 +1,5 @@
-from dataclasses import dataclass, field
-from functools import cached_property
-from src.domain.repositories.artist_repository import ArtistRepository
-from src.domain.repositories.music_repository import MusicRepository
+from dependency_injector import containers, providers
+from src.presentation.graphql.context import GraphQLContext
 from src.application.use_cases.artist_use_cases import ArtistUseCases
 from src.application.use_cases.music_use_cases import MusicUseCases
 from src.presentation.graphql.artist.resolver import ArtistResolvers
@@ -14,28 +12,32 @@ from src.infrastructure.database.repositories.music_repository import (
 )
 
 
-@dataclass
-class Container:
-    """Container de injeção de dependências"""
+class Container(containers.DeclarativeContainer):
+    """Container de injeção de dependências usando dependency-injector"""
 
-    # Permite injetar repositórios personalizados para testes
-    artist_repository: ArtistRepository = field(
-        default_factory=SQLAlchemyArtistRepository
+    # Repositories
+    artist_repository = providers.Singleton(SQLAlchemyArtistRepository)
+    music_repository = providers.Singleton(SQLAlchemyMusicRepository)
+
+    # Use Cases
+    artist_use_cases = providers.Factory(
+        ArtistUseCases, artist_repository=artist_repository
     )
-    music_repository: MusicRepository = field(default_factory=SQLAlchemyMusicRepository)
 
-    @cached_property
-    def artist_use_cases(self) -> ArtistUseCases:
-        return ArtistUseCases(self.artist_repository)
+    music_use_cases = providers.Factory(
+        MusicUseCases, music_repository=music_repository
+    )
 
-    @cached_property
-    def music_use_cases(self) -> MusicUseCases:
-        return MusicUseCases(self.music_repository)
+    # Resolvers
+    artist_resolvers = providers.Factory(
+        ArtistResolvers, artist_use_cases=artist_use_cases
+    )
 
-    @cached_property
-    def artist_resolvers(self) -> ArtistResolvers:
-        return ArtistResolvers(self.artist_use_cases)
+    music_resolvers = providers.Factory(MusicResolvers, music_use_cases=music_use_cases)
 
-    @cached_property
-    def music_resolvers(self) -> MusicResolvers:
-        return MusicResolvers(self.music_use_cases)
+    # Contexto do GraphQL
+    graphql_context = providers.Factory(
+        GraphQLContext,
+        artist_resolvers=artist_resolvers,
+        music_resolvers=music_resolvers,
+    )
