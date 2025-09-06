@@ -17,3 +17,6 @@ pyjwt==2.10.1
 
 # Development
 pytest==8.4.1
+black==25.1.0
+ruff==0.12.11
+pre-commit==4.3.0
